@@ -1,0 +1,6 @@
+framework module VueSwift {
+  umbrella header "VueSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}

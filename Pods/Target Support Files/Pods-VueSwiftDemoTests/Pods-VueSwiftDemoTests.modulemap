@@ -1,0 +1,6 @@
+framework module Pods_VueSwiftDemoTests {
+  umbrella header "Pods-VueSwiftDemoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
