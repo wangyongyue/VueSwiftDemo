@@ -22,9 +22,9 @@ class Main:MainProtocol{
          
             
             switch index{
-            case 0:Router.push(Text().getViewController(), ["id":"10"], nil)
-            case 1:Router.push(Button().getViewController(), ["id":"10"], nil)
-            case 2:Router.push(Field().getViewController(), ["id":"10"], nil)
+            case 0:Router.push(Text.getViewController(), ["id":"10"], nil)
+            case 1:Router.push(Button.getViewController(), ["id":"10"], nil)
+            case 2:Router.push(Field.getViewController(), ["id":"10"], nil)
             default:print("kong")
             }
            
@@ -34,10 +34,10 @@ class Main:MainProtocol{
         
     }
     
-    func getViewController() -> UIViewController {
+    static func getViewController() -> UIViewController {
         
         let vc = MainVC()
-        vc.m = self
+        vc.m = Main()
         vc.navigationItem.title = "列表"
         return vc
         

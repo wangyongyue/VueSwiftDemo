@@ -47,10 +47,10 @@ class Button:MainProtocol{
         
     }
     
-    func getViewController() -> UIViewController {
+    static func getViewController() -> UIViewController {
         
         let vc = MainVC()
-        vc.m = self
+        vc.m = Button()
         vc.navigationItem.title = "button"
         return vc
         

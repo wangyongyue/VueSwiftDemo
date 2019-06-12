@@ -33,10 +33,10 @@ class Field:MainProtocol{
         
     }
     
-    func getViewController() -> UIViewController {
+    static func getViewController() -> UIViewController {
         
         let vc = MainVC()
-        vc.m = self
+        vc.m = Field()
         vc.navigationItem.title = "field"
         return vc
         

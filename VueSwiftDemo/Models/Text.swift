@@ -25,10 +25,10 @@ class Text:MainProtocol{
         
     }
     
-    func getViewController() -> UIViewController {
+    static func getViewController() -> UIViewController {
         
         let vc = MainVC()
-        vc.m = self
+        vc.m = Text()
         vc.navigationItem.title = "text"
         return vc
         
