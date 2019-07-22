@@ -8,103 +8,130 @@
 
 import UIKit
 public typealias VueBlock = () -> ()
-public class Vue :NSObject{
-    private var array = Array<VueBlock>()
+open class Vue :NSObject{
     
-    
-    public var v_text:String?
-    public func v_text(v:()->String?){
-        
-        v_text = v()
-        sendVueMsg()
+    public static var vueComponents = [String:String]()
+    public static func register(aClass:AnyClass,toClass:AnyClass){
+        let str = NSStringFromClass(aClass)
+        let toStr = NSStringFromClass(toClass)
+        vueComponents[str] = toStr
     }
     
-    public var v_image:UIImage?
-    public func v_image(v:()->UIImage?){
-        
-        v_image = v()
-        sendVueMsg()
-    }
-    public var v_backgroundColor:UIColor?
-    public func v_backgroundColor(v:()->UIColor?){
-        
-        v_backgroundColor = v()
-        sendVueMsg()
-    }
-    
-    public var v_if:Bool?
-    public func v_if(v:()->Bool?){
-        
-        v_if = v()
-        sendVueMsg()
-    }
-    
-    public var v_selected:Bool?
-    public func v_selected(v:()->Bool?){
-        
-        v_selected = v()
-        sendVueMsg()
-    }
-    
-    
-    
-    
-    public var v_on:VueBlock?
-    public func v_on(vue:@escaping VueBlock){
-        
-        self.v_on = vue
-        
-    }
-    
-    public var v_input:VueBlock?
-    public func v_input(vue:@escaping VueBlock){
-        
-        self.v_input = vue
-        
-    }
-    
-    
-    public typealias VueIndexBlock = (_ index:Int) -> ()
-    public var v_index:VueIndexBlock?
-    public func v_index(vue:@escaping VueIndexBlock){
-        
-        self.v_index = vue
-        
-    }
-    
-    
-    public var v_array:Array<VueData>?
-    public func v_array(_ isPage:Bool,v:()->Array<VueData>?){
-        if isPage{
-            if let arr = v(),let v_arr = v_array{
-                
-                v_array = v_arr + arr
-            }else{
-                v_array = v()
-                
-            }
-            
-        }else{
-            
-            v_array = v()
-            
+    //text
+    public typealias VueTextBlock = (String) -> ()
+    public var blockTextDic = [String:VueTextBlock]()
+    public func v_text(vId:String?,v:@escaping ()->String?){
+        if let a = vId,let text = v(){
+            blockTextDic[a]?(text)
         }
-        sendVueMsg()
+ 
     }
-    
-    
-    
-   public func setupVue(_ callBack:@escaping VueBlock){
-        
-        array.append(callBack)
-        
-    }
-    public func sendVueMsg(){
-        
-        for value in array{
-            
-            value()
+    public func v_text(vId:String?,v:VueTextBlock?){
+        if let a = vId,let b = v{
+            blockTextDic[a] = b
         }
     }
+    //attributedText
+    public typealias VueAttributedTextBlock = (NSAttributedString) -> ()
+    public var blockAttributedTextDic = [String:VueAttributedTextBlock]()
+    public func v_attributedText(vId:String?,v:@escaping ()->NSAttributedString?){
+        if let a = vId,let att = v(){
+            blockAttributedTextDic[a]?(att)
+        }
+    }
+    public func v_attributedText(vId:String?,v:VueAttributedTextBlock?){
+        if let a = vId,let b = v{
+            blockAttributedTextDic[a] = b
+        }
+    }
+    
+    //image
+    public typealias VueImgBlock = (UIImage) -> ()
+    public var blockImgDic = [String:VueImgBlock]()
+    public func v_image(vId:String?,v:@escaping ()->UIImage?){
+        if let a = vId,let img = v(){
+            blockImgDic[a]?(img)
+        }
+    }
+    public func v_image(vId:String?,v:VueImgBlock?){
+        if let a = vId,let b = v{
+            blockImgDic[a] = b
+        }
+
+    }
+    
+    //if
+    public typealias VueIfBlock = (Bool) -> ()
+    public var blockIfDic = [String:VueIfBlock]()
+    public func v_if(vId:String?,v:@escaping ()->Bool?){
+        if let a = vId,let isF = v(){
+            blockIfDic[a]?(isF)
+        }
+    }
+    public func v_if(vId:String?,v:VueIfBlock?){
+        if let a = vId,let b = v{
+            blockIfDic[a] = b
+        }
+    }
+    
+    //on
+    public typealias VueOnBlock = () -> ()
+    public var blockOnDic = [String:VueOnBlock]()
+    public func v_on(vId:String?,v:VueOnBlock?){
+        if let a = vId,let b = v{
+            blockOnDic[a] = b
+        }
+    }
+    public func v_on(vId:String?){
+        if let a = vId {
+            blockOnDic[a]?()
+        }
+    }
+    
+    //input
+    public typealias VueInputBlock = () -> ()
+    public var blockInputDic = [String:VueInputBlock]()
+    public func v_input(vId:String?,v:VueInputBlock?){
+        if let a = vId,let b = v{
+            blockInputDic[a] = b
+        }
+    }
+    public func v_input(vId:String?){
+        if let a = vId {
+            blockInputDic[a]?()
+        }
+    }
+    
+    //index
+    public typealias VueIndexBlock = (Int) -> ()
+    public var blockIndexDic = [String:VueIndexBlock]()
+    public func v_index(vId:String?,v:VueIndexBlock?){
+        if let a = vId,let b = v{
+            blockIndexDic[a] = b
+        }
+    }
+    public func v_index(vId:String?,index:Int){
+        if let a = vId {
+            blockIndexDic[a]?(index)
+        }
+    }
+
+    
+    //array
+    public typealias VueArrayBlock = (Array<VueData>) -> ()
+    public var blockArrayDic = [String:VueArrayBlock]()
+    public func v_array(vId:String?,v:@escaping ()->Array<VueData>?){
+        if let a = vId,let array = v(){
+            blockArrayDic[a]?(array)
+        }
+    }
+    public func v_array(vId:String?,v:VueArrayBlock?){
+        if let a = vId,let b = v{
+            blockArrayDic[a] = b
+        }
+    }
+    
+    //
+    open func v_start(){}
     
 }

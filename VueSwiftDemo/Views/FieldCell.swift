@@ -9,7 +9,7 @@
 import UIKit
 import VueSwift
 
-class FieldCell: UITableViewCell,CellProtocol {
+class FieldCell: UITableViewCell {
     
     
     let label:UILabel = {
@@ -41,13 +41,18 @@ class FieldCell: UITableViewCell,CellProtocol {
         label.snp.makeConstraints { (make) in
             make.top.equalTo(0)
             make.left.equalTo(12)
-            
+            make.width.equalTo(100)
+
         }
         field.snp.makeConstraints { (make) in
             make.top.equalTo(0)
             make.right.equalTo(-12)
             make.width.equalTo(100)
             
+        }
+        field.v_change {[weak self] in
+            
+            self?.label.text = self?.field.text
         }
         tap.v_tap {[weak self] in
             
@@ -60,25 +65,20 @@ class FieldCell: UITableViewCell,CellProtocol {
         super.init(coder: aDecoder)
         
     }
-    func setModel(_ amodel: VueData) {
-        
-        if amodel is FieldCellProtocol{
+    override func setV_Model(_ aModel: VueData) {
+        if aModel is FieldModel{
             
-            let h = amodel as! FieldCellProtocol
-            label.v_text(vue: h.inputVue)
-            field.v_input(vue: h.inputVue)
+            let h = aModel as! FieldModel
+            label.text = h.name
             
-            h.startListen()
         }
     }
     
     
 }
-protocol FieldCellProtocol {
+
+class FieldModel: VueData{
     
-    var inputVue:Vue{get}
+    var name:String?
     
-    func startListen()
 }
-
-

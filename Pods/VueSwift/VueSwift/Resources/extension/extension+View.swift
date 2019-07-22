@@ -8,18 +8,21 @@
 
 import UIKit
 
-public protocol VueData {
-    
-    var v_palm:String{get}
-    var v_identifier:Int{get}
-    var v_selectVue:Vue{get}
+open class VueData:NSObject {
+    var v_identifier:Int = 0
+    open func v_height() -> CGFloat{
+        return 50
+    }
+    var v_block:VueBlock?
+    func v_to(_ block:@escaping VueBlock){
+        self.v_block = block
+    }
+    public func v_to(){
+        self.v_block?()
+    }
 }
 
-public protocol CellProtocol{
-    
-    func setModel(_ amodel:VueData)
-    
-}
+
 
 private var vcMapKey: UInt8 = 8
 private var vcBlockKey: UInt8 = 9
@@ -50,8 +53,10 @@ extension UIViewController{
 }
 
 
-private var tapVueKey: UInt8 = 6
-private var tapVueClickKey: UInt8 = 7
+private var tapVueKey: UInt8 = 106
+private var tapVueClickKey: UInt8 = 107
+private var tapVIDKey: UInt8 = 108
+
 extension UITapGestureRecognizer{
     
     
@@ -80,15 +85,24 @@ extension UITapGestureRecognizer{
             return  objc_getAssociatedObject(self, &tapVueKey) as? Vue
         }
     }
-    public func v_on(vue:Vue){
+    private var vId: String? {
+        set {
+            objc_setAssociatedObject(self, &tapVIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
         
+        get {
+            return  objc_getAssociatedObject(self, &tapVIDKey) as? String
+        }
+    }
+    public func v_on(vId:String?,vue:Vue?){
+        self.vId = vId
         self.vue = vue
         self.addTarget(self, action: #selector(tapEvent))
     }
     
     @objc func tapEvent(){
         self.block?()
-        self.vue?.v_on?()
+        self.vue?.v_on(vId: self.vId)
         
     }
     
@@ -96,23 +110,14 @@ extension UITapGestureRecognizer{
 }
 extension UIView{
     
-    //v-backgroundColor
-    public func v_backgroundColor(vue:Vue){
-        vue.setupVue {
-
-            self.backgroundColor = vue.v_backgroundColor
-        }
+    //v_if
+    public func v_if(vId:String?,vue:Vue?){
         
-    }
-    //v-if
-    public func v_if(vue:Vue){
-        
-        vue.setupVue {
+        vue?.v_if(vId: vId) { (isf) in
             
-            if let v = vue.v_if{
-                self.isHidden = v
-            }
+            self.isHidden = isf
         }
+       
         
     }
     
@@ -120,14 +125,20 @@ extension UIView{
 }
 extension UILabel{
     
-    
-    //{{ text }}
-    public func v_text(vue:Vue){
-        
-        vue.setupVue {
-            self.text = vue.v_text
+    //v_text
+    public func v_text(vId:String?,vue:Vue?){
+        vue?.v_text(vId: vId) { (text) in
+            
+            self.text = text
         }
-        
+    }
+    //v_attributedText
+    public func v_attributedText(vId:String?,vue:Vue?){
+        vue?.v_attributedText(vId: vId) { (att) in
+            
+            self.attributedText = att
+        }
+       
     }
 
     
@@ -135,55 +146,37 @@ extension UILabel{
 
 extension UIImageView{
     
-    //v-image
-    public func v_image(vue:Vue){
-        
-        vue.setupVue {
-            self.image = vue.v_image
+    //v_image
+    public func v_image(vId:String?,vue:Vue?){
+        vue?.v_image(vId: vId) { (img) in
+            self.image = img
         }
-        
     }
-    
-    
     
 }
 
 private var buttonVueKey: UInt8 = 0
 private var buttonVueClickKey: UInt8 = 1
+private var BUTTONVIDKey: UInt8 = 30
 
 
 extension UIButton{
-    //{{ text }}
-    public func v_text(vue:Vue){
-        
-        vue.setupVue {
-            self.setTitle(vue.v_text, for: .normal)
+    //v_text
+    public func v_text(vId:String?,vue:Vue?){
+        vue?.v_text(vId: vId) { (text) in
+            self.setTitle(text, for: .normal)
         }
+       
         
     }
-    //v-image
-    public func v_image(vue:Vue){
-        
-        vue.setupVue {
-            self.setImage(vue.v_image, for: .normal)
+    //v_image
+    public func v_image(vId:String?,vue:Vue?){
+        vue?.v_image(vId: vId) { (img) in
+            self.setImage(img, for: .normal)
         }
-        
     }
-   
-    //v-selected
-    public func v_selected(vue:Vue){
-        
-        vue.setupVue {
-            if let v = vue.v_selected{
-                
-                self.isSelected = v
 
-            }
-        }
-        
-    }
-    
-    //v-on
+    //v_on
     private var vue: Vue? {
         set {
             objc_setAssociatedObject(self, &buttonVueKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -193,16 +186,26 @@ extension UIButton{
             return  objc_getAssociatedObject(self, &buttonVueKey) as? Vue
         }
     }
+    private var vId: String? {
+        set {
+            objc_setAssociatedObject(self, &BUTTONVIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        get {
+            return  objc_getAssociatedObject(self, &BUTTONVIDKey) as? String
+        }
+    }
     
-    public func v_on(vue:Vue){
+    public func v_on(vId:String?,vue:Vue?){
         
         self.addTarget(self, action: #selector(clickEvent), for: .touchUpInside)
         self.vue = vue
+        self.vId = vId
         
     }
     @objc func clickEvent(){
         
-        self.vue?.v_on?()
+        self.vue?.v_on(vId: self.vId)
         
     }
     
@@ -233,18 +236,19 @@ extension UIButton{
 
 private var textFieldVueKey: UInt8 = 2
 private var textFieldClickKey: UInt8 = 3
+private var textFieldVIDKey: UInt8 = 40
+
 extension UITextField{
     
-    //{{ text }}
-    public func v_text(vue:Vue){
-        
-        vue.setupVue {
-            self.text = vue.v_text
+    //v_text
+    public func v_text(vId:String?,vue:Vue?){
+        vue?.v_text(vId: vId) { (text) in
+            self.text = text
         }
         
     }
     
-    //v-input
+    //v_input
     private var vue: Vue? {
         set {
             objc_setAssociatedObject(self, &textFieldVueKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -253,24 +257,32 @@ extension UITextField{
             return  objc_getAssociatedObject(self, &textFieldVueKey) as? Vue
         }
     }
-    public func v_input(vue:Vue){
+    private var vId: String? {
+        set {
+            objc_setAssociatedObject(self, &textFieldVIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
         
+        get {
+            return  objc_getAssociatedObject(self, &textFieldVIDKey) as? String
+        }
+    }
+    public func v_input(vId:String?,vue:Vue?){
+        self.vId = vId
         self.vue = vue
         self.addTarget(self, action: #selector(changeText), for: .editingChanged)
         
     }
     @objc func changeText(){
         
-        self.vue?.v_text(v: { () -> String? in
+        self.vue?.v_text(vId: self.vId, v: { () -> String? in
             
             return self.text
         })
+        self.vue?.v_input(vId: self.text)
         
-        self.vue?.v_input?()
     }
     
-    //v-change
-    
+    //v_change
     private var block: VueBlock? {
         set {
             objc_setAssociatedObject(self, &textFieldClickKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -294,21 +306,22 @@ extension UITextField{
     
 }
 
+
 private var textVueKey: UInt8 = 4
 private var textClickKey: UInt8 = 5
+private var textVIDKey: UInt8 = 60
 
 extension UITextView:UITextViewDelegate{
     
-    //{{ text }}
-    public func v_text(vue:Vue){
-        
-        vue.setupVue {
-            self.text = vue.v_text
+    //v_text
+    public func v_text(vId:String?,vue:Vue?){
+        vue?.v_text(vId: vId) { (text) in
+            self.text = text
         }
-        
+      
     }
     
-    //v-input
+    //v_input
     private var vue: Vue? {
         set {
             objc_setAssociatedObject(self, &textVueKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -317,27 +330,36 @@ extension UITextView:UITextViewDelegate{
             return  objc_getAssociatedObject(self, &textVueKey) as? Vue
         }
     }
-    
-    public func v_input(vue:Vue){
+    private var vId: String? {
+        set {
+            objc_setAssociatedObject(self, &textVIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
         
+        get {
+            return  objc_getAssociatedObject(self, &textVIDKey) as? String
+        }
+    }
+    
+    public func v_input(vId:String?,vue:Vue?){
+        self.vId = vId
         self.vue = vue
         self.delegate = self
 
     }
+
     
-    func textViewDidChange(_ textView: UITextView) {
+    public func textViewDidChange(_ textView: UITextView) {
         
-        self.vue?.v_text(v: { () -> String? in
-            return self.text
+        self.vue?.v_text(vId: self.vId, v: { () -> String? in
+            
+            return textView.text
         })
-        
-        block?()
-        self.vue?.v_input?()
+       self.vue?.v_input(vId: textView.text)
+       block?()
         
     }
     
-    
-    //v-change
+    //v_change
     public typealias changeBlock = (_ text:String) ->()
     private var block: VueBlock? {
         set {

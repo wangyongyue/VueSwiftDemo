@@ -8,9 +8,8 @@
 
 import UIKit
 
-public class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
+open class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
 
-    public static var templates = Array<AnyClass>()
     public var array:Array<VueData>?
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -19,14 +18,32 @@ public class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
         self.delegate = self
         self.dataSource = self
         self.separatorStyle = .none
-        self.rowHeight = UITableView.automaticDimension
-        self.estimatedRowHeight = 50.0
+        self.tableFooterView = UIView()
         
-        register(CTable.templates)
+        for (key,value) in Vue.vueComponents{
+            let aClass = NSClassFromString(value)
+            let superClass = class_getSuperclass(aClass)
+            if let sClass = superClass{
+                if NSStringFromClass(sClass) == NSStringFromClass(UITableViewCell.classForCoder()){
+                    self.register(aClass, forCellReuseIdentifier: value)
+                }
+               
+            }
+            
+            
+        }
 
     }
-    public override func numberOfRows(inSection section: Int) -> Int {
+    open override func numberOfRows(inSection section: Int) -> Int {
         return 1
+    }
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let model = array?[indexPath.row]
+        if let h = model?.v_height(){
+            
+            return h
+        }
+        return 50
     }
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let count = array?.count{
@@ -36,52 +53,38 @@ public class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
     }
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = array?[indexPath.row]
-        if let m = model ,let palm = model?.v_palm {
-            let cell = self.dequeueReusableCell(withIdentifier: palm, for: indexPath)
-            cell.selectionStyle = .none
-            if cell is CellProtocol{
-                let aCell = cell as! CellProtocol
-                aCell.setModel(m)
+        if let m = model  {
+            let identifier = Vue.vueComponents[NSStringFromClass(m.classForCoder)]
+            if let ide =  identifier {
+                let cell = tableView.dequeueReusableCell(withIdentifier: ide, for: indexPath)
+                cell.selectionStyle = .none
+                cell.setV_Model(m)
+                m.v_to {
+                    self.block?(indexPath.row)
+                    self.vue?.v_index(vId: self.vId, index: indexPath.row)
+                }
+
+                return cell
             }
-            
-            m.v_selectVue.v_on {
-                
-                self.block?(indexPath.row)
-                self.vue?.v_index?(indexPath.row)
-            }
-            return cell
         }
        
         return UITableViewCell()
         
     }
     
-    public func register(_ templates:Array<AnyClass>){
-        
-        for value in templates{
-            
-            let className:String=NSStringFromClass(value).components(separatedBy: ".").last!
-            self.register(value, forCellReuseIdentifier: className)
-        }
-        
-    }
+   
     
-    
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     
-    
     //v-array
-    public func v_array(vue:Vue){
-        
-        vue.setupVue {
-            self.array = vue.v_array
+    public func v_array(vId:String?,vue:Vue?){
+        vue?.v_array(vId: vId) { (array) in
+            self.array = array
             self.reloadData()
-            
         }
-        
     }
     
     //v_didSelect
@@ -96,8 +99,9 @@ public class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
     
     //v-index
     public var vue:Vue?
-    public func v_index(vue:Vue){
-        
+    public var vId:String?
+    public func v_index(vId:String?,vue:Vue?){
+        self.vId = vId
         self.vue = vue
         
     }
@@ -105,4 +109,6 @@ public class CTable: UITableView ,UITableViewDataSource,UITableViewDelegate{
 
 }
 
-
+extension UITableViewCell{
+   @objc open func setV_Model(_ aModel:VueData){}
+}

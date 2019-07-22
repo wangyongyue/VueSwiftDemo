@@ -9,17 +9,25 @@
 import UIKit
 import VueSwift
 import SnapKit
-class MainVC: UIViewController {
 
+
+let arrayId = "arrayId"
+let indexId = "indexId"
+
+class MainVC: UIViewController {
     
-    var m:MainProtocol?
+    var m:Vue?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.white
         
-        
+        Vue.register(aClass: MainModel.classForCoder(), toClass:  MainCell.classForCoder())
+        Vue.register(aClass: TextModel.classForCoder(), toClass:  TextCell.classForCoder())
+        Vue.register(aClass: ButtonModel.classForCoder(), toClass:  ButtonCell.classForCoder())
+        Vue.register(aClass: FieldModel.classForCoder(), toClass:  FieldCell.classForCoder())
+
         let table = CTable()
         table.rowHeight = 60
         self.view.addSubview(table)
@@ -30,30 +38,12 @@ class MainVC: UIViewController {
             make.bottom.equalTo(0)
             
         }
-        table.register([MainCell.classForCoder(),
-                        TextCell.classForCoder(),
-                        FieldCell.classForCoder(),
-                        ButtonCell.classForCoder()
-                        ])
-        
-        if let v = m?.arrayVue{
-            table.v_array(vue: v)
-
-        }
-        
-        if let v = m?.indexVue{
-            table.v_index(vue: v)
-        }
-        
-        m?.startListen()
+      
+        table.v_array(vId: arrayId, vue: m)
+        table.v_index(vId: indexId, vue: m)
+      
+        m?.v_start()
     }
-
-}
-protocol MainProtocol {
-    
-    var arrayVue:Vue{get}
-    var indexVue:Vue{get}
-    func startListen()
 
 }
 

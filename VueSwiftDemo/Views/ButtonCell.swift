@@ -9,7 +9,7 @@
 import UIKit
 import VueSwift
 
-class ButtonCell: UITableViewCell,CellProtocol {
+class ButtonCell: UITableViewCell {
     
     
    
@@ -56,28 +56,26 @@ class ButtonCell: UITableViewCell,CellProtocol {
         super.init(coder: aDecoder)
         
     }
-    func setModel(_ amodel: VueData) {
-        
-        if amodel is ButtonCellProtocol{
+    override func setV_Model(_ aModel: VueData) {
+        if aModel is ButtonModel{
             
-            let h = amodel as! ButtonCellProtocol
-            leftButton.v_on(vue: h.leftClickVue)
-            button.v_on(vue: h.clickVue)
-            tap.v_on(vue: h.tapVue)
-            
-            h.startListen()
+            let h = aModel as! ButtonModel
+            leftButton.v_click {
+                
+                h.v_to()
+            }
+            button.v_click {
+                
+                h.v_to()
+            }
         }
     }
     
     
 }
-protocol ButtonCellProtocol {
+
+class ButtonModel: VueData{
     
-    var leftClickVue:Vue{get}
-    var clickVue:Vue{get}
-    var tapVue:Vue{get}
+    var name:String?
     
-    func startListen()
 }
-
-

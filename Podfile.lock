@@ -1,6 +1,6 @@
 PODS:
   - SnapKit (5.0.0)
-  - VueSwift (1.1.0)
+  - VueSwift (2.0.6)
 
 DEPENDENCIES:
   - SnapKit
@@ -13,7 +13,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
-  VueSwift: c203b4890aa08e7b3201958885993125bd5e427f
+  VueSwift: 45058fe7f9c70f46ec1a91b6a731b328a3cde7f6
 
 PODFILE CHECKSUM: 925f28ddb5affcf25a76725dc4d28db15fe65fc7
 

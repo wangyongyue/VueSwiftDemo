@@ -8,86 +8,32 @@
 
 import UIKit
 import VueSwift
-class Field:MainProtocol{
+class Field:Vue,V_ViewControllerProtocol{
     
-    var arrayVue: Vue = Vue()
-    var indexVue: Vue = Vue()
-    
-    func startListen() {
-        
-        
-        loadData()
-        
-        indexVue.v_index { (index) in
-            
-            let m = self.arrayVue.v_array?[index] as! MainModel
-            print(m.data?.name)
-            print(m.v_identifier)
-            if m.v_identifier == 0{
-                
-                //                Router.push(Details().getViewController(), ["id":"10"], nil)
-                
-            }
-            
-        }
-        
-    }
-    
-    static func getViewController() -> UIViewController {
+    func v_viewController() -> UIViewController {
         
         let vc = MainVC()
-        vc.m = Field()
-        vc.navigationItem.title = "field"
+        vc.m = self
+        vc.navigationItem.title = "text"
         return vc
-        
     }
-    
-    func loadData(){
+    override func v_start() {
         
+        let list = ["field1","field2","field3"]
         var array = Array<VueData>()
-        for i in 1...12{
+        for value in list{
+            
             let m = FieldModel()
-            let d = FieldData()
-            m.data = d
+            m.name = value
             array.append(m)
             
         }
-        
-        arrayVue.v_array(true, v: { () -> Array<VueData>? in
+        self.v_array(vId: arrayId) { () -> Array<VueData>? in
             
             return array
-        })
-        
-        
-        
-    }
-    
-    
-}
-class FieldModel: VueData,FieldCellProtocol{
-    
-    
-    var v_palm: String = "FieldCell"
-    var v_identifier:Int = 0
-    var v_selectVue:Vue = Vue()
-    
-    
-    var inputVue:Vue = Vue()
-    var data:FieldData?
-    
-    func startListen() {
-        inputVue.v_input {[weak self] in
-            
-            self?.data?.name = self?.inputVue.v_text
         }
-    
-        
     }
     
-}
-class FieldData{
-    
-    var name:String?
-    
     
 }
+

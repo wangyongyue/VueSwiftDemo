@@ -8,7 +8,7 @@
 
 import UIKit
 import VueSwift
-class TextCell: UITableViewCell,CellProtocol {
+class TextCell: UITableViewCell {
     
     
     let label:UILabel = {
@@ -24,7 +24,8 @@ class TextCell: UITableViewCell,CellProtocol {
         
         self.contentView.addSubview(label)
         self.contentView.addGestureRecognizer(tap)
-        
+        label.text = "test"
+
         label.snp.makeConstraints { (make) in
             make.top.equalTo(0)
             make.left.equalTo(0)
@@ -40,26 +41,20 @@ class TextCell: UITableViewCell,CellProtocol {
         super.init(coder: aDecoder)
         
     }
-    func setModel(_ amodel: VueData) {
-        
-        if amodel is TextCellProtocol{
+    override func setV_Model(_ aModel: VueData) {
+        if aModel is TextModel{
             
-            let h = amodel as! TextCellProtocol
-            label.v_text(vue: h.textVue)
-            tap.v_on(vue: h.tapVue)
-            
-            h.startListen()
+            let h = aModel as! TextModel
+            label.text = h.name
+           
         }
     }
     
-    
 }
-protocol TextCellProtocol {
+class TextModel: VueData{
     
-    var textVue:Vue{get}
-    var tapVue:Vue{get}
+    var name:String?
     
-    func startListen()
 }
 
 
