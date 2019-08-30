@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1805D1B12317728800A986A7 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805D1B02317728800A986A7 /* TestViewController.swift */; };
+		1805D1B32317729500A986A7 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805D1B22317729500A986A7 /* Test.swift */; };
+		1805D1B5231772CF00A986A7 /* TestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805D1B4231772CF00A986A7 /* TestCell.swift */; };
 		187CFB9422A10F470002837C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187CFB9322A10F470002837C /* AppDelegate.swift */; };
 		187CFB9622A10F470002837C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187CFB9522A10F470002837C /* ViewController.swift */; };
 		187CFB9922A10F470002837C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187CFB9722A10F470002837C /* Main.storyboard */; };
@@ -47,6 +50,9 @@
 
 /* Begin PBXFileReference section */
 		0BA1D5DA9D728B39FB62B2CE /* Pods-VueSwiftDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VueSwiftDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-VueSwiftDemoUITests/Pods-VueSwiftDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		1805D1B02317728800A986A7 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		1805D1B22317729500A986A7 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		1805D1B4231772CF00A986A7 /* TestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCell.swift; sourceTree = "<group>"; };
 		187CFB9022A10F470002837C /* VueSwiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VueSwiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187CFB9322A10F470002837C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		187CFB9522A10F470002837C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +113,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1805D1AF2317725500A986A7 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				1805D1B02317728800A986A7 /* TestViewController.swift */,
+				1805D1B22317729500A986A7 /* Test.swift */,
+				1805D1B4231772CF00A986A7 /* TestCell.swift */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 		187CFB8722A10F470002837C = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +150,7 @@
 			children = (
 				187CFB9322A10F470002837C /* AppDelegate.swift */,
 				187CFB9522A10F470002837C /* ViewController.swift */,
+				1805D1AF2317725500A986A7 /* test */,
 				187CFBC222A110400002837C /* Models */,
 				187CFBC422A110540002837C /* Views */,
 				187CFBC322A110520002837C /* ViewControllers */,
@@ -450,10 +467,13 @@
 				187CFB9622A10F470002837C /* ViewController.swift in Sources */,
 				187CFBD322A11D2C0002837C /* Text.swift in Sources */,
 				187CFBD522A11D350002837C /* Button.swift in Sources */,
+				1805D1B32317729500A986A7 /* Test.swift in Sources */,
+				1805D1B5231772CF00A986A7 /* TestCell.swift in Sources */,
 				187CFB9422A10F470002837C /* AppDelegate.swift in Sources */,
 				187CFBCC22A114BE0002837C /* TextCell.swift in Sources */,
 				187CFBD022A115290002837C /* FieldCell.swift in Sources */,
 				187CFBCA22A110D90002837C /* MainCell.swift in Sources */,
+				1805D1B12317728800A986A7 /* TestViewController.swift in Sources */,
 				187CFBD722A11D3E0002837C /* Field.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

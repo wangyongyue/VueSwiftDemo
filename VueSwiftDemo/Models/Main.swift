@@ -19,7 +19,7 @@ class Main:Vue,V_ViewControllerProtocol{
     }
     override func v_start() {
         
-        let list = ["lable 使用","button 使用","textField 使用"]
+        let list = ["lable 使用","button 使用","textField 使用","test"]
         var array = Array<VueData>()
         for value in list{
             
@@ -37,6 +37,7 @@ class Main:Vue,V_ViewControllerProtocol{
             case 0:Router.push(Text(), ["id":10], nil)
             case 1:Router.push(Button(), ["id":10], nil)
             case 2:Router.push(Field(), ["id":10], nil)
+            case 3:Router.push(Test(), ["id":10], nil)
             default:print("kong")
             }
         }

@@ -1,14 +1,14 @@
 //
-//  MainTemplate.swift
-//  VueSwift
+//  TestCell.swift
+//  VueSwiftDemo
 //
-//  Created by apple on 2019/3/14.
+//  Created by apple on 2019/8/29.
 //  Copyright © 2019 wyy. All rights reserved.
 //
 
 import UIKit
 import VueSwift
-class MainCell: UITableViewCell {
+class TestCell: UITableViewCell {
     
     
     let label:UILabel = {
@@ -18,7 +18,7 @@ class MainCell: UITableViewCell {
         return a
     }()
     let tap = UITapGestureRecognizer()
-
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,18 +33,18 @@ class MainCell: UITableViewCell {
             make.bottom.equalTo(0)
             
         }
-
+        
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
     }
-
+    
     override func setV_Model(_ aModel: VueData) {
-        if aModel is MainModel{
-
-            let h = aModel as! MainModel
+        if aModel is TestCellModel{
+            
+            let h = aModel as! TestCellModel
             label.text = h.name
             tap.v_tap {
                 
@@ -52,17 +52,21 @@ class MainCell: UITableViewCell {
             }
         }
     }
-   
-
+    
+    
 }
 
 
-class MainModel: VueData{
+class TestCellModel: VueData{
     
     var name:String?
     override func v_height() -> CGFloat {
         
         return 100
+    }
+    init(_ a:String) {
+        
+        self.name = a
     }
 }
 

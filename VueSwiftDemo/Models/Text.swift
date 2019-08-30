@@ -22,10 +22,10 @@ class Text:Vue,V_ViewControllerProtocol{
         
         let list = ["lable1","lable2","lable3"]
         var array = Array<VueData>()
-        for value in list{
+        for i in 1...120{
             
             let m = TextModel()
-            m.name = value
+            m.name = "lable1"
             array.append(m)
             
         }
